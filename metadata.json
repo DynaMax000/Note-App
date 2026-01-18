@@ -1,0 +1,5 @@
+{
+  "name": "ObsidianGen AI",
+  "description": "A minimalist, Obsidian-inspired note-taking app with Markdown support, bidirectional linking visualization, and AI-powered summarization.",
+  "requestFramePermissions": []
+}
