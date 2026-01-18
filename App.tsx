@@ -46,7 +46,6 @@ import {
   Palette,
   Smile,
   Zap,
-  SlidersHorizontal,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import {
@@ -698,7 +697,6 @@ export default function App() {
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving">("saved");
   const [showAiBlob, setShowAiBlob] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
-  const [showToolbar, setShowToolbar] = useState(false);
   const [aiThinking, setAiThinking] = useState(false);
   const [isGeneratingTitle, setIsGeneratingTitle] = useState(false);
   const [isAppLoading, setIsAppLoading] = useState(true);
@@ -1523,15 +1521,22 @@ export default function App() {
       handleOpenNote(targetNote.id);
     } else if (isCtrl) {
       const activeNote = notes.find((n) => n.id === activeNoteId);
-      const folderId = activeNote?.folderId;
+      const targetFolderId = activeNote?.folderId;
       const newNote: Note = {
         id: generateId(),
         title: title,
         content: `# ${title}\n\n`,
-        folderId: folderId,
+        folderId: targetFolderId,
         createdAt: Date.now(),
         updatedAt: Date.now(),
       };
+      if (targetFolderId) {
+        setFolders((prev) =>
+          prev.map((f) =>
+            f.id === targetFolderId ? { ...f, collapsed: false } : f,
+          ),
+        );
+      }
       setNotes((prev) => [newNote, ...prev]);
       handleOpenNote(newNote.id);
     } else {
@@ -1541,16 +1546,22 @@ export default function App() {
 
       const createAction = () => {
         const activeNote = notes.find((n) => n.id === activeNoteId);
-        const folderId = activeNote?.folderId;
-
+        const targetFolderId = activeNote?.folderId;
         const newNote: Note = {
           id: generateId(),
           title: title,
           content: `# ${title}\n\n`,
-          folderId: folderId,
+          folderId: targetFolderId,
           createdAt: Date.now(),
           updatedAt: Date.now(),
         };
+        if (targetFolderId) {
+          setFolders((prev) =>
+            prev.map((f) =>
+              f.id === targetFolderId ? { ...f, collapsed: false } : f,
+            ),
+          );
+        }
         setNotes((prev) => [newNote, ...prev]);
         handleOpenNote(newNote.id);
       };
@@ -1750,11 +1761,10 @@ export default function App() {
       action: () => setViewMode(ViewMode.GRAPH),
     },
     {
-      id: "toggle-toolbox",
-      label: "Toggle Toolbox",
-      icon: <SlidersHorizontal size={16} />,
-      shortcut: "T",
-      action: () => setShowToolbar((prev) => !prev),
+      id: "editor-view",
+      label: "Editor View",
+      icon: <FileText size={16} />,
+      action: () => setViewMode(ViewMode.EDITOR),
     },
     {
       id: "home",
@@ -2166,7 +2176,7 @@ export default function App() {
                       if (!note) return null;
                       return (
                         <MotionDiv
-                          layout
+                          layout={!commandPaletteOpen}
                           key={id}
                           initial={{ opacity: 0, scale: 0.9, y: 5 }}
                           animate={{
@@ -2291,10 +2301,6 @@ export default function App() {
                           backlinks={activeBacklinks}
                           onNoteClick={handleOpenNote}
                           zenMode={zenMode}
-                          showToolbar={showToolbar}
-                          onToggleToolbar={() =>
-                            setShowToolbar((prev) => !prev)
-                          }
                         />
                       </MotionDiv>
                     </AnimatePresence>

@@ -319,29 +319,11 @@ export const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
   ) => {
     // Custom CSS for specific Tiptap styling needs (Checkboxes, etc)
     const customStyles = `
-      /* Global List Reset for Tiptap */
-      .ProseMirror ul,
-      .ProseMirror ol {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-      }
-      
-      /* Target ANY paragraph inside a list item (bullet, ordered, or task) */
-      .ProseMirror li p {
-        margin-top: 0 !important;
-        margin-bottom: 0 !important;
-      }
-
-      /* Explicitly handle the div wrapper in TaskItems if needed, though 'li p' should catch it */
-      .ProseMirror li[data-type="taskItem"] div p {
-        margin: 0 !important;
-      }
-
       /* Remove default list styles for task lists */
       ul[data-type="taskList"] {
         list-style: none;
         padding: 0;
-        margin: 0 !important;
+        margin: 0;
       }
       
       /* Flex container for the item */
@@ -349,7 +331,7 @@ export const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
         display: flex;
         align-items: flex-start; /* Align checkbox with top of text */
         gap: 0.5rem;
-        margin-bottom: 0.1rem;
+        margin-bottom: 0.25rem;
       }
 
       /* Fix the label wrapper preventing line breaks */
@@ -464,7 +446,7 @@ export const TiptapEditor = forwardRef<TiptapEditorRef, TiptapEditorProps>(
       editorProps: {
         attributes: {
           class:
-            "prose prose-zinc dark:prose-invert focus:outline-none max-w-none min-h-[500px] prose-p:my-1 prose-headings:mt-4 prose-headings:mb-2 prose-code:bg-zinc-100 dark:prose-code:bg-zinc-800 prose-code:px-1 prose-code:rounded prose-code:before:content-none prose-code:after:content-none prose-li:my-0 prose-ul:my-0 prose-ol:my-0 prose-blockquote:my-1 prose-blockquote:not-italic [&_li_p]:!my-0",
+            "prose prose-zinc dark:prose-invert focus:outline-none max-w-none min-h-[500px] prose-p:my-1 prose-headings:mt-4 prose-headings:mb-2 prose-code:bg-zinc-100 dark:prose-code:bg-zinc-800 prose-code:px-1 prose-code:rounded prose-code:before:content-none prose-code:after:content-none prose-li:my-0 prose-ul:my-0 prose-ol:my-0 prose-blockquote:my-1 prose-blockquote:not-italic",
         },
         handleClick: (view, pos, event) => {
           const target = event.target as HTMLElement;

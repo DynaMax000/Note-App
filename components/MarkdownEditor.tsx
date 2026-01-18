@@ -58,8 +58,6 @@ interface MarkdownEditorProps {
   backlinks?: Note[];
   onNoteClick?: (id: string) => void;
   zenMode?: boolean;
-  showToolbar: boolean;
-  onToggleToolbar: () => void;
 }
 
 const SlashMenu = ({ isOpen, onClose, onSelect, position }: any) => {
@@ -148,10 +146,9 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
   backlinks = [],
   onNoteClick,
   zenMode = false,
-  showToolbar,
-  onToggleToolbar,
 }) => {
   const [copied, setCopied] = useState(false);
+  const [showToolbar, setShowToolbar] = useState(false);
   const [readingProgress, setReadingProgress] = useState(0);
   const [, forceUpdate] = useState({}); // Force update for toolbar active states
 
@@ -477,7 +474,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
 
             {
               <button
-                onClick={onToggleToolbar}
+                onClick={() => setShowToolbar(!showToolbar)}
                 className={`hidden md:block p-2 transition-colors rounded-xl ${
                   showToolbar
                     ? "text-accent bg-accent/10"
@@ -516,6 +513,14 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
             >
               <FileImage size={20} />
             </button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+
             <input
               type="file"
               ref={fileInputRef}
@@ -652,7 +657,7 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
             </div>
             <div className="flex-shrink-0">
               <button
-                onClick={onToggleToolbar}
+                onClick={() => setShowToolbar(false)}
                 className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 text-zinc-400 hover:text-red-500 rounded-xl transition-colors"
               >
                 <X size={18} />
