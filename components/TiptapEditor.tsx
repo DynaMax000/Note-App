@@ -88,10 +88,26 @@ const DelayedMarkdown = Extension.create({
         return false;
       },
       Tab: () => {
-        // Global Tab handler: Always insert 2 spaces
-        // This overrides default focus behavior but gives "IDE-like" feeling
+        // Try escaping/nesting list items first
+        if (this.editor.can().sinkListItem("listItem")) {
+          return this.editor.chain().sinkListItem("listItem").run();
+        }
+        if (this.editor.can().sinkListItem("taskItem")) {
+          return this.editor.chain().sinkListItem("taskItem").run();
+        }
+
+        // Global Tab handler: Fallback to inserting 2 spaces
         this.editor.chain().insertContent("  ").run();
         return true;
+      },
+      "Shift-Tab": () => {
+        if (this.editor.can().liftListItem("listItem")) {
+          return this.editor.chain().liftListItem("listItem").run();
+        }
+        if (this.editor.can().liftListItem("taskItem")) {
+          return this.editor.chain().liftListItem("taskItem").run();
+        }
+        return false;
       },
       // Auto-closing brackets/quotes
       "(": () => {

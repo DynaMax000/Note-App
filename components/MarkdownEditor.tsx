@@ -306,12 +306,21 @@ export const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
 
     switch (prefix) {
       case "# ":
+        editor.chain().toggleHeading({ level: 1 }).run();
+        break;
       case "## ":
+        editor.chain().toggleHeading({ level: 2 }).run();
+        break;
       case "- ":
+        editor.chain().toggleBulletList().run();
+        break;
       case "- [ ] ":
+        editor.chain().toggleTaskList().run();
+        break;
       case "> ":
-        // Just insert the text at start of line?
-        // Or just insert at cursor?
+        editor.chain().toggleBlockquote().run();
+        break;
+      default:
         editor.chain().insertContent(prefix).run();
         break;
     }
