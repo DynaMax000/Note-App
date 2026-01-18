@@ -46,6 +46,7 @@ import {
   Palette,
   Smile,
   Zap,
+  SlidersHorizontal,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import {
@@ -667,8 +668,12 @@ export default function App() {
     return parsedNotes[0]?.id || "";
   });
   const [openNoteIds, setOpenNoteIds] = useState<string[]>(() => {
-    const saved = localStorage.getItem("obsidian-gen-notes");
-    const parsedNotes = saved ? JSON.parse(saved) : [INITIAL_NOTE];
+    const saved = localStorage.getItem("obsidian-gen-open-notes");
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    const savedNotes = localStorage.getItem("obsidian-gen-notes");
+    const parsedNotes = savedNotes ? JSON.parse(savedNotes) : [INITIAL_NOTE];
     return parsedNotes.length > 0 ? [parsedNotes[0].id] : [];
   });
 
@@ -696,6 +701,7 @@ export default function App() {
   const [zenMode, setZenMode] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"saved" | "saving">("saved");
   const [showAiBlob, setShowAiBlob] = useState(false);
+  const [showToolbar, setShowToolbar] = useState(false);
   const [showAttachments, setShowAttachments] = useState(false);
   const [aiThinking, setAiThinking] = useState(false);
   const [isGeneratingTitle, setIsGeneratingTitle] = useState(false);
@@ -814,6 +820,13 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("obsidian-gen-active-note", activeNoteId);
   }, [activeNoteId]);
+
+  useEffect(() => {
+    localStorage.setItem(
+      "obsidian-gen-open-notes",
+      JSON.stringify(openNoteIds),
+    );
+  }, [openNoteIds]);
 
   useEffect(() => {
     if (theme === Theme.DARK) {
@@ -1761,10 +1774,11 @@ export default function App() {
       action: () => setViewMode(ViewMode.GRAPH),
     },
     {
-      id: "editor-view",
-      label: "Editor View",
-      icon: <FileText size={16} />,
-      action: () => setViewMode(ViewMode.EDITOR),
+      id: "toggle-toolbox",
+      label: "Toggle Toolbox",
+      icon: <SlidersHorizontal size={16} />,
+      shortcut: "T",
+      action: () => setShowToolbar((prev) => !prev),
     },
     {
       id: "home",
@@ -2301,6 +2315,10 @@ export default function App() {
                           backlinks={activeBacklinks}
                           onNoteClick={handleOpenNote}
                           zenMode={zenMode}
+                          showToolbar={showToolbar}
+                          onToggleToolbar={() =>
+                            setShowToolbar((prev) => !prev)
+                          }
                         />
                       </MotionDiv>
                     </AnimatePresence>
