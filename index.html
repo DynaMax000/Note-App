@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ObsidianGen AI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              background: 'var(--background)',
+              foreground: 'var(--foreground)',
+              accent: '#8b5cf6', // Violet-500
+              'accent-hover': '#7c3aed', // Violet-600
+              // Semantic dark mode layers
+              'dark-base': '#09090b', // Zinc 950
+              'dark-surface': '#18181b', // Zinc 900
+              'dark-highlight': '#27272a', // Zinc 800
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            typography: ({ theme }) => ({
+              DEFAULT: {
+                css: {
+                  '--tw-prose-body': theme('colors.zinc.700'),
+                  '--tw-prose-headings': theme('colors.zinc.900'),
+                  '--tw-prose-links': theme('colors.accent'),
+                  '--tw-prose-bold': theme('colors.zinc.900'),
+                  '--tw-prose-counters': theme('colors.zinc.500'),
+                  '--tw-prose-bullets': theme('colors.zinc.300'),
+                  '--tw-prose-quotes': theme('colors.zinc.900'),
+                  '--tw-prose-quote-borders': theme('colors.zinc.200'),
+                  '--tw-prose-code': theme('colors.zinc.900'),
+                  '--tw-prose-pre-code': theme('colors.zinc.800'), 
+                  '--tw-prose-pre-bg': theme('colors.zinc.50'), // Light background for pre in light mode
+                  maxWidth: 'none',
+                  pre: {
+                    color: theme('colors.zinc.800'),
+                    backgroundColor: theme('colors.zinc.50'),
+                  },
+                  'code::before': {
+                     content: '""',
+                  },
+                  'code::after': {
+                     content: '""',
+                  }
+                },
+              },
+              invert: {
+                css: {
+                  '--tw-prose-body': theme('colors.zinc.400'),
+                  '--tw-prose-headings': theme('colors.zinc.100'),
+                  '--tw-prose-links': theme('colors.accent'),
+                  '--tw-prose-bold': theme('colors.zinc.100'),
+                  '--tw-prose-counters': theme('colors.zinc.500'),
+                  '--tw-prose-bullets': theme('colors.zinc.600'),
+                  '--tw-prose-quotes': theme('colors.zinc.100'),
+                  '--tw-prose-quote-borders': theme('colors.zinc.700'),
+                  '--tw-prose-code': theme('colors.zinc.100'),
+                  '--tw-prose-pre-code': theme('colors.zinc.300'),
+                  '--tw-prose-pre-bg': theme('colors.zinc.900'), 
+                  pre: {
+                    color: theme('colors.zinc.300'),
+                    backgroundColor: theme('colors.zinc.900'),
+                  }
+                },
+              },
+            }),
+          },
+        },
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --background: #f4f4f5; /* Zinc 100 */
+        --foreground: #09090b; /* Zinc 950 */
+      }
+      .dark {
+        --background: #09090b; /* Zinc 950 (Deepest Black) */
+        --foreground: #fafafa; /* Zinc 50 */
+      }
+      body {
+        background-color: var(--background);
+        color: var(--foreground);
+        font-family: 'Inter', sans-serif;
+        overflow: hidden; /* Prevent body scroll, handle in containers */
+      }
+      /* Custom Scrollbar for inner containers */
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(161, 161, 170, 0.3); /* Zinc 400 */
+        border-radius: 3px;
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(82, 82, 91, 0.4); /* Zinc 600 */
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(161, 161, 170, 0.6);
+      }
+      .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: rgba(82, 82, 91, 0.7);
+      }
+      
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+      }
+      /* Hide scrollbar for IE, Edge and Firefox */
+      .scrollbar-hide {
+          -ms-overflow-style: none;  /* IE and Edge */
+          scrollbar-width: none;  /* Firefox */
+      }
+      
+      /* View Transition Styles for Theme Ripple */
+      ::view-transition-old(root),
+      ::view-transition-new(root) {
+        animation: none;
+        mix-blend-mode: normal;
+      }
+      /* Always put the new view on top so the clip-path reveals it over the old one */
+      ::view-transition-old(root) {
+        z-index: 1;
+      }
+      ::view-transition-new(root) {
+        z-index: 9999;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "d3": "https://esm.sh/d3@^7.9.0",
+    "react-markdown": "https://esm.sh/react-markdown@^10.1.0",
+    "remark-gfm": "https://esm.sh/remark-gfm@^4.0.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.37.0",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "framer-motion": "https://esm.sh/framer-motion@^12.26.2",
+    "react-textarea-autosize": "https://esm.sh/react-textarea-autosize@^8.5.9",
+    "react-syntax-highlighter": "https://esm.sh/react-syntax-highlighter@15.5.0?external=react,react-dom",
+    "react-syntax-highlighter/dist/esm/styles/prism": "https://esm.sh/react-syntax-highlighter@15.5.0/dist/esm/styles/prism?external=react,react-dom",
+    "react-syntax-highlighter/": "https://esm.sh/react-syntax-highlighter@^16.1.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
